@@ -1,0 +1,37 @@
+{
+  "myQuran":"My Quran",
+  "BacaAlQuranDeganMudah":"Baca Al-Quran Degan Mudah",
+  "Kategori":"Kategori",
+  "label1":"SURAT",
+  "label2":"Doa",
+  "BacaSekarang":"Baca Sekarang",
+  "commonCurrentTime": "{time}",
+"@commonCurrentTime": {
+    "placeholders": {
+        "time": {
+            "type": "DateTime",
+            "format": "jm"
+
+    }}
+},
+"commonCustomDateFormat": "{date}",
+"@commonCustomDateFormat": {
+    "placeholders": {
+        "date": {
+            "type": "DateTime",
+            "format": "EEE, M/d/y",
+            "isCustomDateFormat": "true"
+        }
+    }
+},
+
+"commonHijriDate": "{date}",
+"@commonHijriDate": {
+    "placeholders": {
+        "date": {
+            "type": "String"
+        }
+    }
+}
+
+}
