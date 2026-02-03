@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:quranapp/constant/extentions.dart';
 import 'package:quranapp/models/surah_model.dart';
+import 'package:quranapp/routes/screen_routes.dart';
 
 class SurahCategoryWidget extends StatelessWidget {
   const SurahCategoryWidget({
@@ -10,7 +11,7 @@ class SurahCategoryWidget extends StatelessWidget {
     required this.isTrailing,
   });
   final int surahNumber;
-  final SurahModel surah;
+  final SuraModel surah;
   final bool isTrailing;
   @override
   Widget build(BuildContext context) {
@@ -42,15 +43,31 @@ class SurahCategoryWidget extends StatelessWidget {
                 ],
               ),
               child: ListTile(
+                onTap: () {
+                  Navigator.pushNamed(
+                    context,
+                    ScreenRoutes.ayatScreen,
+                    arguments: surahNumber,
+                  );
+                }, //https://quranapi.pages.dev/api/112.json
                 title: Text(surah.surahName),
                 subtitle: Row(
                   children: [
                     Text(surah.revelationPlace),
                     5.gap,
-                    Text(surah.totalAyah.toString()),
+                    Text("${surah.totalAyah.toString().toUpperCase()}   Ayat"),
                   ],
                 ),
-                trailing: isTrailing ? Text(surah.surahNameArabic) : SizedBox(),
+                trailing: isTrailing
+                    ? Text(
+                        surah.surahNameArabic,
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xff863ED5),
+                        ),
+                      )
+                    : SizedBox(),
                 leading: Stack(
                   alignment: Alignment.center,
                   children: [

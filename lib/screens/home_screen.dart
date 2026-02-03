@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hijri/hijri_calendar.dart';
+import 'package:lottie/lottie.dart';
 import 'package:quranapp/constant/extentions.dart';
+import 'package:quranapp/cubit/salwat_time/cubit/salwat_time_cubit.dart';
 import 'package:quranapp/cubit/surahCategory/cubit/surah_category_cubit.dart';
 import 'package:quranapp/cubit/timer/cubit/timer_cubit.dart';
 import 'package:quranapp/generated/l10n.dart';
 import 'package:quranapp/routes/screen_routes.dart';
 import 'package:quranapp/widgets/elevaed_button_widget.dart';
 import 'package:quranapp/widgets/surah_category_widget.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -24,11 +27,16 @@ class HomeScreen extends StatelessWidget {
       "azkar_massa.json",
       "PostPrayer_azkar.json",
     ];
-    return BlocProvider(
-      create: (context) => TimerCubit()..startTimer(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => TimerCubit()..startTimer()),
+        BlocProvider(
+          create: (context) => SalwatTimeCubit()..getSalwatTime(city: "Cairo"),
+        ),
+      ],
       child: Scaffold(
         body: Padding(
-          padding: const EdgeInsets.only(top: 10, left: 24, right: 24),
+          padding: const EdgeInsets.only(top: 10, left: 15, right: 15),
           child: BlocProvider(
             create: (context) => SurahCategoryCubit(),
             child: Column(
@@ -37,6 +45,14 @@ class HomeScreen extends StatelessWidget {
                 Stack(
                   alignment: Alignment.topLeft,
                   children: [
+                    Positioned(
+                      right: 0,
+                      child: Image.asset(
+                        "assets/image/2.png",
+                        width: 200,
+                        height: 200,
+                      ),
+                    ),
                     BlocBuilder<TimerCubit, DateTime>(
                       builder: (context, state) {
                         return Column(
@@ -81,27 +97,53 @@ class HomeScreen extends StatelessWidget {
                                 color: Color(0xff232323),
                               ),
                             ),
-                            Container(
-                              padding: const EdgeInsets.only(left: 24),
-                              margin: const EdgeInsets.only(top: 11),
-                              width: 117,
-                              height: 29,
-                              decoration: BoxDecoration(
-                                color: const Color(0xff9543FF),
-                                borderRadius: BorderRadius.circular(7),
-                              ),
+                            BlocBuilder<SalwatTimeCubit, SalwatTimeState>(
+                              builder: (context, state) {
+                                if (state is SalwatTimeLoading) {
+                                  return Shimmer.fromColors(
+                                    baseColor: Colors.grey,
+                                    highlightColor: Colors.white,
+                                    child: Container(width: 117, height: 29),
+                                  );
+                                } else if (state is SalwatTimeLoaded) {
+                                  return InkWell(
+                                    onTap: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        ScreenRoutes.salwatTime,
+                                        arguments: [state.salwatTime],
+                                      );
+                                    },
+                                    child: Container(
+                                      // padding: const EdgeInsets.only(left: 24),
+                                      margin: const EdgeInsets.only(top: 11),
+                                      width: 117,
+                                      height: 29,
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xff9543FF),
+                                        borderRadius: BorderRadius.circular(7),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          state.salwatTime.nextPray,
+                                          style: const TextStyle(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w700,
+                                            color: Colors.white,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  return Text("Error");
+                                }
+                              },
                             ),
                           ],
                         );
                       },
-                    ),
-                    Positioned(
-                      right: 0,
-                      child: Image.asset(
-                        "assets/image/2.png",
-                        width: 207,
-                        height: 200,
-                      ),
                     ),
                   ],
                 ),
@@ -115,7 +157,6 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 11.gap,
-
                 BlocBuilder<SurahCategoryCubit, SurahCategoryState>(
                   builder: (context, state) {
                     int index = 0;
@@ -137,9 +178,7 @@ class HomeScreen extends StatelessWidget {
                               ? Colors.white
                               : const Color(0xff9543FF),
                         ),
-
                         12.gap,
-
                         ElevaedButtonWidget(
                           color: index == 1
                               ? const Color(0xff9543FF)
@@ -156,14 +195,18 @@ class HomeScreen extends StatelessWidget {
                     );
                   },
                 ),
-
                 20.gap,
-
                 Expanded(
                   child: BlocBuilder<SurahCategoryCubit, SurahCategoryState>(
                     builder: (context, state) {
                       if (state is SurahCategoryLoading) {
-                        return const Center(child: CircularProgressIndicator());
+                        return Center(
+                          child: Lottie.asset(
+                            'assets/lottie/Quran.json',
+                            width: 100,
+                            height: 100,
+                          ),
+                        );
                       } else if (state is SurahCategoryLoaded &&
                           state.index == 0) {
                         return ListView.separated(

@@ -9,11 +9,14 @@ class SurahCategoryCubit extends Cubit<SurahCategoryState> {
   SurahCategoryCubit() : super(SurahCategoryLoading()) {
     getCategory();
   }
-  List<SurahModel> surah = [];
+  List<SuraModel> surah = [];
+
+  /// with the list of surah and index 0. If the result is failed, it
+  /// will emit [SurahCategoryError] with the error message.
   void getCategory() async {
     try {
       emit(SurahCategoryLoading());
-      List<SurahModel> data = await SurahApi().getSurah();
+      List<SuraModel> data = await SurahApi().getSurah();
       surah = data;
       emit(SurahCategoryLoaded(surah: data, index: 0));
     } catch (e) {

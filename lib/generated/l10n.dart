@@ -1,7 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import 'intl/messages_all.dart';
 
 // **************************************************************************
@@ -101,7 +100,7 @@ class S {
     final String timeString = timeDateFormat.format(time);
 
     return Intl.message(
-      timeString,
+      '$timeString',
       name: 'commonCurrentTime',
       desc: '',
       args: [timeString],
@@ -117,7 +116,7 @@ class S {
     final String dateString = dateDateFormat.format(date);
 
     return Intl.message(
-      dateString,
+      '$dateString',
       name: 'commonCustomDateFormat',
       desc: '',
       args: [dateString],

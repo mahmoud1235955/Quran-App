@@ -6,14 +6,12 @@ class SurahApi {
   static final SurahApi _instance = SurahApi._internal();
   SurahApi._internal();
   factory SurahApi() => _instance;
-  Future<List<SurahModel>> getSurah() async {
+  Future<List<SuraModel>> getSurah() async {
     final Response response = await dio.get(
       "https://quranapi.pages.dev/api/surah.json",
     );
     List<dynamic> jsonData = response.data;
-    List<SurahModel> surah = jsonData
-        .map((e) => SurahModel.fromJson(e))
-        .toList();
+    List<SuraModel> surah = jsonData.map((e) => SuraModel.fromJson(e)).toList();
     return surah;
   }
 }

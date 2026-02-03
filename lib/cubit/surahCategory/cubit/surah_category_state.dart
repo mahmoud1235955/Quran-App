@@ -6,7 +6,7 @@ sealed class SurahCategoryState {}
 final class SurahCategoryLoading extends SurahCategoryState {}
 
 final class SurahCategoryLoaded extends SurahCategoryState {
-  final List<SurahModel> surah;
+  final List<SuraModel> surah;
   final int index;
   SurahCategoryLoaded({required this.surah, required this.index});
 }
